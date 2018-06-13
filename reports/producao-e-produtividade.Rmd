@@ -68,10 +68,19 @@ Se quisermos modelar o efeito do tamanho do programa em termos de docentes (perm
 
 *Importante*: sempre queremos ver os dados antes de fazermos qualquer modelo ou sumário: 
 
+
 ```{r}
 cacc %>% 
   ggplot(aes(x = `Docentes permanentes`, y = producao)) + 
   geom_point()
+```
+
+```{r fig.asp=1}
+# This block was derivated from the previous one to try another view with same scale on both axis.
+#cacc %>% 
+#  ggplot(aes(x = `Docentes permanentes`, y = producao)) + 
+#  geom_point() +
+#  scale_x_continuous(limits = c(0,300))
 ```
 
 Parece que existe uma relação. Vamos criar um modelo então:
@@ -106,7 +115,7 @@ Produza aqui a sua versão desse texto, portanto:
 
 -----
 
-*SUBSTITUA ESSE TEXTO*
+Regressão linear foi utilizada para analisar se *a quantidade de docentes permanentes num dado programa de pós-graduação* tem uma associação significativa com *a produtividade do respectivo programa*, esta última medida em termos de publicações em períodicos dos extratos A1, A2 e B1. Os resultados da regressão indicam que um modelo com os *1 preditor* no formato *produtividade = -41,27 + 4,81.docentes_permanentes* explicam *81,46%* da variância da variável de resposta (R2 = *81,46%*). *Quantidade de docentes*, medida *em pessoas que integram o programa* tem uma relação significativa com o erro (b = *[-59,29; -28,25]*, IC com 95%). O aumento de 1 unidade de *quantidade de docentes permanentes* produz uma mudança positiva de *4,81 na produtividade do programa*.
 
 -----
 
