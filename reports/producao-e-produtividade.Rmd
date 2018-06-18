@@ -1,6 +1,8 @@
 ---
 title: "Regressão linear na prática"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r warning=FALSE, echo=FALSE}
@@ -66,7 +68,7 @@ cacc %>%
 
 Se quisermos modelar o efeito do tamanho do programa em termos de docentes (permanentes) na quantidade de artigos publicados, podemos usar regressão. 
 
-*Importante*: sempre queremos ver os dados antes de fazermos qualquer modelo ou sumário: 
+**Importante**: sempre queremos ver os dados antes de fazermos qualquer modelo ou sumário: 
 
 
 ```{r}
@@ -115,7 +117,7 @@ Produza aqui a sua versão desse texto, portanto:
 
 -----
 
-Regressão linear foi utilizada para analisar se *a quantidade de docentes permanentes num dado programa de pós-graduação* tem uma associação significativa com *a produtividade do respectivo programa*, esta última medida em termos de publicações em períodicos dos extratos A1, A2 e B1. Os resultados da regressão indicam que um modelo com os *1 preditor* no formato *produtividade = -41,27 + 4,81.docentes_permanentes* explicam *81,46%* da variância da variável de resposta (R2 = *81,46%*). *Quantidade de docentes*, medida *em pessoas que integram o programa* tem uma relação significativa com o erro (b = *[-59,29; -28,25]*, IC com 95%). O aumento de 1 unidade de *quantidade de docentes permanentes* produz uma mudança positiva de *4,81 na produtividade do programa*.
+Regressão linear foi utilizada para analisar se **a quantidade de docentes permanentes num dado programa de pós-graduação** tem uma associação significativa com **a produção do respectivo programa**, esta última medida em termos da quantidade de publicações em períodicos dos extratos A1, A2 e B1. Os resultados da regressão indicam que um modelo com **1 preditor** no formato **producao = -41,27 + 4,81 . docentes_permanentes** explicam **81,46%** da variância da variável de resposta (R2 = **81,46%**). A **quantidade de docentes**, medida **em pessoas que integram o programa**, tem uma relação significativa com o erro (b = **[4,27; 5,36]**, IC com 95%). O aumento de 1 unidade de **quantidade de docentes permanentes** gera uma mudança positiva de **4,81 na produção do programa**.
 
 -----
 
@@ -123,7 +125,8 @@ Dito isso, o que significa a relação que você encontrou na prática para ente
 
 -----
 
-*SUBSTITUA ESSE TEXTO PELA SUA DISCUSSÃO DOS RESULTADOS*
+Pela análise realizada, verificamos que a quantidade de docentes permanentes e a produção de um programa são duas características associadas positivamente de maneira significativa. Isso é o mesmo que dizer que o crescimento de uma ocorre junto com o crescimento da outra, precisamente a uma taxa estatisticamente esperada de +4,81 unidades de produção para cada docente a mais no programa. Todavia, precisamos ter cuidado na compreensão desse resultado, pois apesar de mencionarmos uma em função da outra, não podemos, no entanto, afirmar que haja qualquer relação de causalidade entre elas, mas apenas que elas têm alguma espécie de relacionamento.
+Por outro lado, podemos imaginar que a quantidade de docente, de fato, implique em maiores quantitativos de produção, uma vez que havendo mais pessoas, espera-se realmente que elas estejam trabalhando e publicando mais conteúdo.
 
 -----
 
@@ -165,7 +168,7 @@ Considerando agora esses três fatores, o que podemos dizer sobre como cada um d
 
 -----
 
-**EXPLICAÇÃO**: *Substitua esse texto por texto feito tal qual o que usamos com uma variável*
+Regressão linear foi utilizada para analisar se **a quantidade de docentes permanentes num dado programa de pós-graduação, a quantidade de alunos de mestrado e a quantidade de alunos de doutorado** têm uma associação significativa com **a produção do respectivo programa**, esta última caraterística sendo medida em termos da quantidade de publicações em períodicos dos extratos A1, A2 e B1. Os resultados da regressão indicam que um modelo com **3 preditores** no formato **producao = -14,37 + 3,5 . docentes_permanentes - 0,19 . alunos_mestrado + 1 . alunos_doutorado** explicam **87,07%** da variância da variável de resposta (R2 = **87,07%**). **Quantidade de docentes**, medida **em pessoas**, tem uma relação significativa com o erro (b = **[2,58; 4,42]**, IC com 95%); bem como a **quantidade de alunos de mestrado**, medida **em pessoas** (b = **[-0,36; -0,03]**, IC com 95%); e também a **quantidade de alunos de doutorado**, medida **em pessoas** (b = **[0,64; 1,37]**, IC com 95%). O aumento de 1 unidade na **quantidade de docentes permanentes** gera uma mudança positiva de **+4,81 na produção do programa**, já o aumento de 1 unidade na **quantidade de alunos de mestrado** gera uma mudança negativa na ordem de **-0,19 na produção do programa**, enquanto que o aumento de 1 unidade na **quantidade de alunos de doutorado** gera uma mudança positiva de **+1 na produção do programa**.
 
 -----
 
@@ -175,3 +178,46 @@ Considerando agora esses três fatores, o que podemos dizer sobre como cada um d
 Diferente de medirmos produção (total produzido), é medirmos produtividade (produzido / utilizado). Abaixo focaremos nessa análise. Para isso crie um modelo que investiga como um conjunto de fatores que você julga que são relevantes se relacionam com a produtividade dos programas. Crie um modelo que avalie como _pelo menos 3 fatores_ se relacionam com a produtividade de um programa. Pode reutilizar fatores que já definimos e analizamos para produção. Mas cuidado para não incluir fatores que sejam função linear de outros já incluídos (ex: incluir A, B e um tercero C=A+B)
 
 Produza abaixo o modelo e um texto que comente (i) o modelo, tal como os que fizemos antes, e (ii) as implicações - o que aprendemos sobre como funcionam programas de pós no brasil?.
+
+```{r}
+modelo3 = lm(produtividade ~ `Docentes permanentes` + mestrados + doutorados, data = cacc)
+
+tidy(modelo3, conf.int = TRUE, conf.level = 0.95)
+glance(modelo3)
+```
+
+Fazendo comparação grosseira, pois são análises com diferentes objetivos, observa-se que utilizando os mesmos preditores do modelo anterior para explicar a produtividade, resulta num modelo bastante pobre pois o agora apenas 35% do comportamento é explicado pelo uso desses preditores (R2 = 0,35), enquanto que no outro cenário atingia-se mais de 87%.
+
+De fato isso é esperado, pois a produtividade é numericamente falando a produção média esperada por pessoa, logo o aumento de pessoas aumenta sim o resultado geral, mas em geral não se pode esperar que uma pessoa venha trazer impacto relevante na produtividade de outras pessoas. Para isso devemos buscar fatores externos às pessoas e isso faremos a seguir.
+
+
+```{r}
+meu_cacc = cacc %>% mutate(atratividade = `Docentes colaboradores`/`Docentes permanentes`,
+                           docentes_total = `Docentes permanentes` + `Docentes colaboradores` + `Docentes visitantes`,
+                           pessoas_total = docentes_total + mestrados + doutorados,
+                           periodicos_A = periodicos_A1 + periodicos_A2)
+
+modelo3b = lm(produtividade ~ `Docentes permanentes` + periodicos_A + `Nível` + `Tem doutorado` + doutorados_pprof, data = meu_cacc)
+
+tidy(modelo3b, conf.int = TRUE, conf.level = 0.95)
+glance(modelo3b)
+```
+
+Uma regressão linear foi utilizada para analisar se **o nível do programa, a quantidade de docentes permanentes num dado programa de pós-graduação, a quantidade de publicações no extrato A, a existência de doutorado e a quantidade de alunos de doutorado por professor** têm uma associação significativa com **a produtividade do respectivo programa**, esta última caraterística sendo medida em termos da quantidade de publicações em períodicos dos extratos A1, A2 e B1 proporcionalmente à (ou seja, dividido por) quantidade de docentes permanentes no programa.
+Os resultados da regressão indicam que um modelo com **5 preditores** no formato **produtividade = 2,49 - 0,09 . docentes_permanentes + 0,04 . periodicos_A - 0,07 . nivel + 1,13 . existe_doutorado + 0,12 . doutorados_pprof** explicam **77,93%** da variância da variável de resposta (R2 = **77,93%**).
+A **quantidade de docentes permanentes**, medida **em pessoas**, tem uma relação significativa com o erro (b = **[-0,12; -0,06]**); bem como a **quantidade de publicações em periódicos do extrato A**, medida em **quantidade de publicações** (b = **[0,03; 0,04]**); e também a **existência de curso de doutorado**, medida **valores lógicos sim/não** (b = **[0,69; 1,57]**). Já o **nível do programa** não apresentou associação significativa com o erro (b = **[-0,38; +0,25]**), bem como a **quantidade de alunos de doutorado por professor** (b = **[-0,27; +0,52]**). Todos os intervalos mencionados consideram 95% de confiança.
+O aumento de 1 unidade na **quantidade de docentes permanentes** corresponde a uma mudança negativa na ordem de **-0,09 na produtividade do programa**, já o aumento de 1 unidade na **quantidade de publicações em períodicos do extrato A** associa-se a uma mudança positiva de **+0,04 na produtividade do programa**, enquanto que a **existência de curso de doutorado** está atrelada a uma mudança positiva na ordem de **+1,13 na produtividade do programa**. Não faz sentido mencionar o "efeito" dos demais preditores sobre a variável de resposta tendo em vista que não apresentaram associação significativa com ela. Vale lembrar que o uso do termo "efeito" não está de forma alguma vinculado à presunção de qualquer relação de causalidade entre os preditores e a variável de resposta, mas meramente que existe uma relação entre esses dados.
+Pela análise realizada, compreendemos que a produtividade nos programas de pós-graduação brasileiros é significativamente relacionada ao número de docentes permanentes no programa, à quantidade de publicações em períodicos do extrato A e à existência de curso de doutorado.
+
+A questão que fica é: será que o modelo melhora retirando os preditores que não apresentaram associação significativa com a variável de resposta?
+
+Vamos ver...
+
+```{r}
+modelo3c = lm(produtividade ~ `Docentes permanentes` + periodicos_A + `Tem doutorado`, data = meu_cacc)
+
+tidy(modelo3c, conf.int = TRUE, conf.level = 0.95)
+glance(modelo3c)
+```
+
+Verificamos que a retirada dos preditores sem associação significativa resultou em coeficientes do modelo linear muito próximos dos valores encontrados para o modelo anterior. O R2 também teve uma variação muito discreta, todavia essa alteração foi para menor. Dessa forma, concluímos observando que é preciso avaliar caso a caso para decidir em favor da simplicidade do modelo (menos preditores) ou em favor da acuidade da predição (erros menores).
