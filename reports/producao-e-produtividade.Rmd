@@ -145,7 +145,7 @@ Visualizar o modelo com muitas variáveis independentes fica mais difícil
 
 ```{r}
 para_plotar_modelo = cacc %>% 
-  data_grid(producao = seq_range(producao, 10), # Crie um vetor de 10 valores no range
+  data_grid(
             `Docentes permanentes` = seq_range(`Docentes permanentes`, 4),  
             # mestrados = seq_range(mestrados, 3),
             mestrados = median(mestrados),
